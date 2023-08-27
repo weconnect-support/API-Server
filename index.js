@@ -1,9 +1,13 @@
 import Koa from 'koa';
 const app = new Koa();
+import Router from 'koa-router';
 const PORT = 8080;
-app.use(ctx => {
-    ctx.body = 'hello koa@@';
-});
+const router = new Router();
+import index from './routes/index.js';
+
+router.use(index.routes());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen(PORT, () => {
     console.log(`sori koa ${PORT}`);
