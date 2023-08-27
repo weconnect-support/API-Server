@@ -8,7 +8,7 @@ import callback from './naverCallback.js';
 users.use('/login/naver',callback.routes());
 
 import getUserInfo from './getUserInfo.js';
-user.use('/login/naver/info', getUserInfo.routes());
+users.use('/login/naver/info', getUserInfo.routes());
 
 
 users.get('/', (ctx, next) => {
