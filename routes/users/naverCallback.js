@@ -10,7 +10,13 @@ router.get('/',async(ctx)=> {
 		headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
 	};
 	let naverRes = await axios(info);
-	ctx.body = naverRes.data;
+	let url = 'https://openapi.naver.com/v1/nid/me';
+	let token = naverRes.data.access_token;
+	let res = await axios({url:url, headers:{Authorization:"Bearer "+token}});
+
+	ctx.body=res.data;
+
+//	ctx.body = naverRes.data;
   });
 
 
