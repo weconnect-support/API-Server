@@ -1,0 +1,3 @@
+#docker run --name ss-dev-server -e -p 30000:8080 ss-dev:latest
+#docker build . -t ss-dev:latest
+docker run -d -p 30000:8080 --name ss-dev-server ss-dev:latest

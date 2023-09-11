@@ -1,2 +1,5 @@
 node_modules/
 routes/users/naverAppInfo.js
+.bash_logout
+.bashrc
+.profile
