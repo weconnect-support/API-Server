@@ -4,8 +4,11 @@ const users = new Router();
 import login from './login.js';
 users.use('/login',login.routes());
 
-import callback from './naverCallback.js';
-users.use('/login/naver',callback.routes());
+import naverCallback from './naverCallback.js';
+users.use('/login/naver',naverCallback.routes());
+
+import kakaoCallback from './kakaoCallback.js';
+users.use('/login/kakao', kakaoCallback.routes());
 
 import getUserInfo from './getUserInfo.js';
 users.use('/login/naver/info', getUserInfo.routes());
