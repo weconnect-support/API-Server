@@ -11,10 +11,16 @@ const oauth2Client = new google.auth.OAuth2(
   gclient_secret,
   domain+"/users/login/google"
 );
-
+console.log(google);
 router.get('/',async(ctx)=> {
-	let res = await oauth2Client.getToken(ctx.query.code);
-	ctx.body=res.tokens;
+	const googleData = await oauth2Client.getToken(ctx.query.code);
+	let access_token = googleData.tokens.access_token;
+	console.log(access_token);
+	var data = await axios({
+	url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
+	})
+	console.log(data.data)
+	ctx.body=data.data;
 });
 
 

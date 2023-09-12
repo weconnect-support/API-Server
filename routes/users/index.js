@@ -11,6 +11,9 @@ import getUserInfo from './getUserInfo.js';
 users.use('/login/naver/info', getUserInfo.routes());
 
 
+import googleCallback from './googleCallback.js';
+users.use("/login/google",googleCallback.routes());
+
 users.get('/', (ctx, next) => {
     ctx.body = 'GET ' + ctx.request.path;
 });
