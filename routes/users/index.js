@@ -4,6 +4,9 @@ const users = new Router();
 import login from './login.js';
 users.use('/login',login.routes());
 
+import join from "./join.js";
+users.use("/join", join.routes());
+
 import naverCallback from './naverCallback.js';
 users.use('/login/naver',naverCallback.routes());
 
