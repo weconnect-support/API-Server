@@ -11,7 +11,7 @@ const oauth2Client = new google.auth.OAuth2(
   gclient_secret,
   domain+"/users/login/google"
 );
-console.log(google);
+//console.log(google);
 router.get('/',async(ctx)=> {
 	const googleData = await oauth2Client.getToken(ctx.query.code);
 	let access_token = googleData.tokens.access_token;
