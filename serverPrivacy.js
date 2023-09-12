@@ -1,12 +1,15 @@
-const dbID = "dbID";
-const dbPW = "dbPW";
-const dbHOST = "dbHOST";
-const dbNAME = "dbNAME";
+const dbID = "root";
+const dbPW = "";
+const dbHOST = "";
+const database = "";
 
 module.exports = {
-	dbID : dbID,
-	dbPW : dbPW,
-	dbHOST : dbHOST,
-	dbNAME : dbNAME
+	client : "mysql",
+	connection:{
+		user : dbID,
+		password : dbPW,
+		host : dbHOST,
+		database : database
+	}
 }
 
