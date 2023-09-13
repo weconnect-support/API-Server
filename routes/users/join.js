@@ -83,10 +83,44 @@ router.post('/', async(ctx)=> {
 			resTxt = "join_complate_using_google"
 		}
 		else if(platform == 2){//kakao
+			const {access_token} = ctx.request.body
+			let data = await axios({
+				url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
+				headers:{
+					'Authorization':`Bearer ${access_token}`,
+					'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'
+				}
+			});
+			console.log(data.data.kakao_account)
+			const {email} = data.data.kakao_account;
+			const name = data.data.kakao_account.profile.nickname;
+			console.log(email);
+			if(await accountCheck(email, platform)){
+				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				return;
+			}
+			let signUpUser = await conn("users").insert(
+					{
+					email: email,
+					name: name,
+					nickname : nickname,
+					is_delete: null,
+					signup_date:conn.raw("now()"),
+					platform : platform,
+					noti_flag : noti_flag,
+					device_id : device_id,
+					agree_term_date : conn.raw("now()"),
+					last_modify_time : conn.raw("now()"),
+					address: address,
+					address_detail: address_detail,
+				}
+			);
+
 			resTxt = "join_complate_using_kakao"
 		}
 		else{//naver.com
 
+			resTxt = "join_complate_using_naver"
 		}
 			
 		ctx.body = {"status":"ok","code":1, "text":resTxt}
