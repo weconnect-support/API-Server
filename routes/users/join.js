@@ -38,6 +38,7 @@ router.post('/', async(ctx)=> {
 					name: name,
 					nickname : nickname,
 					is_delete: null,
+					phone : phone,
 					signup_date:conn.raw("now()"),
 					platform : 4,
 					noti_flag : noti_flag,
@@ -52,9 +53,13 @@ router.post('/', async(ctx)=> {
 		}
 	}
 	else if(platform <= 3 || platform >= 1 ){
-		var resTxt = "";	
+		var resTxt = "";
+		const {access_token} = ctx.request.body
+		if(!access_token){
+			ctx.body = {"status":"no","code":-1 ,"text": "parameter validation check error"};
+			return;
+		}
 		if(platform == 1){//google
-			const {access_token} = ctx.request.body
 			let data = await axios({
 				url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
 			})
@@ -71,6 +76,7 @@ router.post('/', async(ctx)=> {
 					nickname : nickname,
 					is_delete: null,
 					signup_date:conn.raw("now()"),
+					phone : phone,
 					platform : platform,
 					noti_flag : noti_flag,
 					device_id : device_id,
@@ -83,7 +89,6 @@ router.post('/', async(ctx)=> {
 			resTxt = "join_complate_using_google"
 		}
 		else if(platform == 2){//kakao
-			const {access_token} = ctx.request.body
 			let data = await axios({
 				url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
 				headers:{
@@ -106,6 +111,7 @@ router.post('/', async(ctx)=> {
 					nickname : nickname,
 					is_delete: null,
 					signup_date:conn.raw("now()"),
+					phone : phone,
 					platform : platform,
 					noti_flag : noti_flag,
 					device_id : device_id,
@@ -119,7 +125,35 @@ router.post('/', async(ctx)=> {
 			resTxt = "join_complate_using_kakao"
 		}
 		else{//naver.com
-
+			let res = await axios({
+				url :'https://openapi.naver.com/v1/nid/me',
+				headers:{
+					"Authorization":`Bearer ${access_token}`
+				}
+			});
+			const {email} = res.data.response;
+			//mobile, mobile_e164
+			if(await accountCheck(email, platform)){
+				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				return;
+			}
+			const {name} = res.data.response;
+			const phone = res.data.response.mobile_e164;
+			let signUpUser = await conn("users").insert({
+				email: email,
+				name: name,
+				nickname : nickname,
+				is_delete: null,
+				signup_date:conn.raw("now()"),
+				phone : phone,
+				platform : platform,
+				noti_flag : noti_flag,
+				device_id : device_id,
+				agree_term_date : conn.raw("now()"),
+				last_modify_time : conn.raw("now()"),
+				address: address,
+				address_detail: address_detail,
+			});
 			resTxt = "join_complate_using_naver"
 		}
 			
