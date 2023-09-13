@@ -1,7 +1,6 @@
 import Router from 'koa-router';
 const router = new Router();
-import {client_id, client_secret} from "./kakaoAppInfo.js";
-import {domain} from "./serviceURL.js"
+import {kakaoClientID, kakaoClientSecret, domain} from "../../serverPrivacy.js";
 import axios from 'axios';
 var state = "RANDOM_STATE";
 var redirectURI = encodeURI(domain+"/users/login/naver");
@@ -12,8 +11,8 @@ router.get('/',async(ctx)=> {
 		method:"POST",
 		data:{
 			"grant_type":"authorization_code",
-			"client_id" :client_id,
-			"client_secret":client_secret,
+			"client_id" :kakaoClientID,
+			"client_secret":kakaoClientSecret,
 			"redirect_uri":"https://ss-dev.noe.systems/users/login/kakao",
 			"code":ctx.query.code,
 //			"scope":"profile_nickname,account_email,gender,birthday"

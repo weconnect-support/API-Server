@@ -1,14 +1,13 @@
 import Router from 'koa-router';
 const router = new Router();
-import {gclient_id, gclient_secret,gapi_key} from "./googleAppInfo.js";
+import {googleClientID, googleClientSecret, domain} from "../../serverPrivacy.js";
 import {google} from 'googleapis'
-import {domain} from "./serviceURL.js"
 import axios from 'axios';
 //https://oauth2.example.com/auth?error=access_denied
 //error request
 const oauth2Client = new google.auth.OAuth2(
-  gclient_id,
-  gclient_secret,
+  googleClientID,
+  googleClientSecret,
   domain+"/users/login/google"
 );
 //console.log(google);
