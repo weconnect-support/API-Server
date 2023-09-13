@@ -20,8 +20,10 @@ router.get('/',async(ctx)=> {
 	};
 	let kakaoRes = await axios(info);
 	console.log(kakaoRes.data);
-	let url = 'https://kapi.kakao.com/v2/user/me?secure_resource=true';
+
 	let token = kakaoRes.data.access_token;
+	console.log("kakao : "+token);
+	let url = 'https://kapi.kakao.com/v2/user/me?secure_resource=true';
 	let res = await axios({url:url, headers:{
 		Authorization:"Bearer "+token,
 		'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
