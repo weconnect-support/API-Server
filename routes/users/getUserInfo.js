@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import {client_id, client_secret} from "./naverAppInfo.js";
+import {naverClientID, naverClientSecret} from "../../serverPrivacy.js";
 const router = new Router();
 import axios from 'axios';
 
