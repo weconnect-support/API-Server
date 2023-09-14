@@ -20,7 +20,7 @@ router.post('/', async(ctx)=> {
 		ctx.body = {"status":"no","code":-1 ,"text": "parameter validation check error"};
 		return;
 	}
-	
+
 	if(platform == 4){
 		const {email, password, name} = ctx.request.body;
 		if(!email || !password){
@@ -61,9 +61,9 @@ router.post('/', async(ctx)=> {
 		}
 		if(platform == 1){//google
 			try{
-			let data = await axios({
-				url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
-			})
+				let data = await axios({
+					url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
+				})
 			}
 			catch(err){
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
@@ -76,7 +76,7 @@ router.post('/', async(ctx)=> {
 				return;
 			}
 			let signUpUser = await conn("users").insert(
-					{
+				{
 					email: email,
 					name: name,
 					nickname : nickname,
@@ -96,13 +96,13 @@ router.post('/', async(ctx)=> {
 		}
 		else if(platform == 2){//kakao
 			try{
-			let data = await axios({
-				url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
-				headers:{
-					'Authorization':`Bearer ${access_token}`,
-					'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'
-				}
-			});
+				let data = await axios({
+					url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
+					headers:{
+						'Authorization':`Bearer ${access_token}`,
+						'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'
+					}
+				});
 			}
 			catch(err){
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
@@ -118,7 +118,7 @@ router.post('/', async(ctx)=> {
 				return;
 			}
 			let signUpUser = await conn("users").insert(
-					{
+				{
 					email: email,
 					name: name,
 					nickname : nickname,
@@ -139,12 +139,12 @@ router.post('/', async(ctx)=> {
 		}
 		else{//naver.com
 			try{
-			let res = await axios({
-				url :'https://openapi.naver.com/v1/nid/me',
-				headers:{
-					"Authorization":`Bearer ${access_token}`
-				}
-			});
+				let res = await axios({
+					url :'https://openapi.naver.com/v1/nid/me',
+					headers:{
+						"Authorization":`Bearer ${access_token}`
+					}
+				});
 			}
 			catch(err){
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
@@ -175,14 +175,14 @@ router.post('/', async(ctx)=> {
 			});
 			resTxt = "join_complate_using_naver"
 		}
-			
+
 		ctx.body = {"status":"ok","code":1, "text":resTxt}
 	}
 	else{
 		ctx.body = {"status":"no", "code":-1, "text":"platform not found"}
 	}
 
-	
+
 });
 
 module.exports = router;
