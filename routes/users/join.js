@@ -60,9 +60,15 @@ router.post('/', async(ctx)=> {
 			return;
 		}
 		if(platform == 1){//google
+			try{
 			let data = await axios({
 				url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
 			})
+			}
+			catch(err){
+				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
+				return;
+			}
 			console.log(data.data)
 			const {email,name} = data.data;
 			if(await accountCheck(email, platform)){
@@ -89,6 +95,7 @@ router.post('/', async(ctx)=> {
 			resTxt = "join_complate_using_google"
 		}
 		else if(platform == 2){//kakao
+			try{
 			let data = await axios({
 				url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
 				headers:{
@@ -96,6 +103,12 @@ router.post('/', async(ctx)=> {
 					'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'
 				}
 			});
+			}
+			catch(err){
+				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
+				return
+			}
+			console.log(data);
 			console.log(data.data.kakao_account)
 			const {email} = data.data.kakao_account;
 			const name = data.data.kakao_account.profile.nickname;
@@ -125,12 +138,18 @@ router.post('/', async(ctx)=> {
 			resTxt = "join_complate_using_kakao"
 		}
 		else{//naver.com
+			try{
 			let res = await axios({
 				url :'https://openapi.naver.com/v1/nid/me',
 				headers:{
 					"Authorization":`Bearer ${access_token}`
 				}
 			});
+			}
+			catch(err){
+				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
+				return;
+			}
 			const {email} = res.data.response;
 			//mobile, mobile_e164
 			if(await accountCheck(email, platform)){
