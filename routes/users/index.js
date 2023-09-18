@@ -13,16 +13,11 @@ users.use('/login/naver',naverCallback.routes());
 import kakaoCallback from './kakaoCallback.js';
 users.use('/login/kakao', kakaoCallback.routes());
 
-import getUserInfo from './getUserInfo.js';
-users.use('/login/naver/info', getUserInfo.routes());
-
-
 import googleCallback from './googleCallback.js';
 users.use("/login/google",googleCallback.routes());
 
-users.get('/', (ctx, next) => {
-    ctx.body = 'GET ' + ctx.request.path;
-});
+import getUserInfo from "./getUserInfo.js";
+users.use("/", getUserInfo.routes());
 
 module.exports = users;
 
