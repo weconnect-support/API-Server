@@ -47,7 +47,7 @@ router.post('/',async(ctx)=>{
 		let userCheck = await conn("users").select().where({email:email, password:crypto.createHash('sha512').update(password).digest('hex')});
 		if(userCheck.length == 1){
 			let {idx, email,nickname}  = userCheck[0];
-			let token = jwt.sign({"idx":idx,"nickname":nickname}, jwtKey);
+			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
 			ctx.body = {"status":"ok","code":1,"userinfo": userCheck[0],token:token,"text":"login_success"}
 		}
 		else{
