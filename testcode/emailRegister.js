@@ -27,6 +27,7 @@ const register = async()=>{
 				"nickname":"xiaxia",
 				"address":"kokookokoko",
 				"address_detail":"zz",
+				"device_id":"testdevice",
 			    	"platform":4,
 				"noti_flag":1
 			}
