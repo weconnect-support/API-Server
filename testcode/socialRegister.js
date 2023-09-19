@@ -21,7 +21,7 @@ const register = async()=>{
 			method : "POST",
 			data : 	{
 //				"access_token":"AAAANQemzuAttr5z4uW9saHB3yYIhYSGXkUSMAwKKyc77UT9Vt6AxeGRlSWQnt06Mic2EiI8G5GlfciI-L_dApM31BI", //naver token
-				"access_token": "ya29.a0AfB_byAt1ummbAOdqhu3pgJLVlViaHCEzu_gSq8ndI5d0-viw9InAUaEMxxfUw8TDQSTagNPv3aX5xhJuxICBGPClJacvrMfRiOdYSao6cxBaWvYEZf9-jpsdpkBJy6AvZP3zUfNOk6sK9TsGyYN5KVG_19LzLga0tgaCgYKAS8SARMSFQGOcNnCtfnoYcvR2LbchAIfJfYK9Q0170",
+				"access_token": "ZZlswc0Mnzjt1rArLeCysRR6rzSpvJVuv_bzUhRpCiolUQAAAYqtY5Qf",
 				"name":"jingeun",
 				"phone":"+821012341234",
 				"nickname":"xiaxia",

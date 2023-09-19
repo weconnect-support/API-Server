@@ -7,7 +7,7 @@ const slogin = async()=>{
 			url :"https://ss-dev.noe.systems/users/login",
 			method : "POST",
 			data : 	{
-				"access_token": "IHsa66nin-7KdqT-WdGLrJVvP6tZ44ViV-G1BC3FCj1zGAAAAYqUmjeP",
+				"access_token": "ZZlswc0Mnzjt1rArLeCysRR6rzSpvJVuv_bzUhRpCiolUQAAAYqtY5Qf",
 				"platform":2, // 1 google, 2 kakao, 3 naver
 			}
 	})

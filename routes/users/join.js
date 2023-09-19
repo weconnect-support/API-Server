@@ -15,6 +15,7 @@ const accountCheck = async(email, platform)=>{
 		return 1;
 }
 router.post('/', async(ctx)=> {
+	var data;
 	const {platform,nickname,noti_flag,device_id,phone,address,address_detail} = ctx.request.body
 	if(!nickname || !noti_flag || !device_id || !phone || !address){
 		ctx.body = {"status":"no","code":-1 ,"text": "parameter validation check error"};
@@ -61,7 +62,7 @@ router.post('/', async(ctx)=> {
 		}
 		if(platform == 1){//google
 			try{
-				let data = await axios({
+				data = await axios({
 					url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
 				})
 			}
@@ -96,7 +97,7 @@ router.post('/', async(ctx)=> {
 		}
 		else if(platform == 2){//kakao
 			try{
-				let data = await axios({
+				data = await axios({
 					url:'https://kapi.kakao.com/v2/user/me?secure_resource=true',
 					headers:{
 						'Authorization':`Bearer ${access_token}`,
@@ -139,7 +140,7 @@ router.post('/', async(ctx)=> {
 		}
 		else{//naver.com
 			try{
-				let res = await axios({
+				data = await axios({
 					url :'https://openapi.naver.com/v1/nid/me',
 					headers:{
 						"Authorization":`Bearer ${access_token}`
@@ -150,7 +151,7 @@ router.post('/', async(ctx)=> {
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return;
 			}
-			const {email} = res.data.response;
+			const {email} = data.data.response;
 			//mobile, mobile_e164
 			if(await accountCheck(email, platform)){
 				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
