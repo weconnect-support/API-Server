@@ -24,15 +24,19 @@ router.put('/', async(ctx)=> {
 		delete option.name;
 		*/
 		var nick = ctx.request.body.nickname
+		var token;
 		try{
 			res = await conn("users").update({"nickname":nick,"last_modify_time":conn.raw("now()")}).where({idx:decode.idx});
 			res = await conn("users").select().where({idx:decode.idx});
+			delete res[0].password
+			token = jwt.sign({"idx":res[0].idx,"nickname":res[0].nickname,"expire":new Date()},jwtKey);
+
 		}
 		catch(e){
-			console.log("asdf");
 			console.log(e);
+			ctx.body = {"status":"no","code":-1, "text":""}
 		}
-		ctx.body = {"status":"ok","code":1,"text":"dataModify","data" : decode, res:res[0]}
+		ctx.body = {"status":"ok","code":1,"text":"data_complate","data" : decode, res:res[0],token:token}
 	}
 })
 
