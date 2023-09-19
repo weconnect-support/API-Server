@@ -19,5 +19,8 @@ users.use("/login/google",googleCallback.routes());
 import getUserInfo from "./getUserInfo.js";
 users.use(getUserInfo.routes());
 
+import updateUserInfo from "./updateUserInfo.js"
+users.use(updateUserInfo.routes());
+
 module.exports = users;
 
