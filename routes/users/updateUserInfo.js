@@ -34,7 +34,7 @@ router.put('/', async(ctx)=> {
 		}
 		catch(e){
 			console.log(e);
-			ctx.body = {"status":"no","code":-1, "text":""}
+			ctx.body = {"status":"no","code":-1, "text":"fail.."}
 		}
 		ctx.body = {"status":"ok","code":1,"text":"data_complate","data" : decode, res:res[0],token:token}
 	}
