@@ -125,10 +125,11 @@ router.post('/',async(ctx)=>{
 
 		let userInfo = await accountCheck(email,platform);
 		if(userInfo.code){ // login sucess
-			ctx.body = {"status":"ok", "code":1,"text":"login_success", "data":userInfo.data};
+			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
+			ctx.body = {"status":"ok", "code":1,"text":"login_success", "token":token};
 		}
 		else{//login fail		
-			ctx.body = {"status":"no","code":1, "test": "non dev"}
+			ctx.body = {"status":"no","code":2, "test": "login fail"}
 		}
 	}
 
