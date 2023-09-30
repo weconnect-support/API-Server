@@ -17,7 +17,7 @@ router.get('/:idx',async(ctx)=>{
 	else{
 		var decoded = jwt.verify(authorization, jwtKey);
 		console.log(decoded);
-		const users = await conn("users").select().where({idx:idx});
+		const users = await conn("users").select().where({idx:idx,is_delete:0});
 		if(users.length != 1){
 			ctx.body = {"status":"no", "code":-1, "text":"invalid user"};
 		}
@@ -40,7 +40,7 @@ router.get('/',async(ctx)=>{
 	else{
 		var decoded = jwt.verify(authorization, jwtKey);
 		console.log(decoded);
-		const users = await conn("users").select().where({idx:decoded.idx});
+		const users = await conn("users").select().where({idx:decoded.idx, is_delete:0});
 		if(users.length != 1){
 			ctx.body = {"status":"no", "code":-1, "text":"invalid user"};
 		}

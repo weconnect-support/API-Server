@@ -19,5 +19,8 @@ users.use("/login/google",googleCallback.routes());
 import getUserInfo from "./getUserInfo.js";
 users.use(getUserInfo.routes());
 
+import deleteUser from "./deleteUser.js";
+users.use(deleteUser.routes());
+
 module.exports = users;
 
