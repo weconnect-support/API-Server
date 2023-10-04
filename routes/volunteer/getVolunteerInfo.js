@@ -17,7 +17,7 @@ router.get('/:idx',async(ctx)=>{
 	else{
 		var decoded = jwt.verify(authorization, jwtKey);
 		console.log(decoded);
-		const volunteers = await conn("volunteers").select().where({idx:idx}).andWhereNot({"is_delete":"0"});
+		const volunteers = await conn("volunteers").select().where({idx:idx}).andWhereNot({"is_delete":"1"});
 		if(volunteers.length == 0){
 			ctx.body = {"status":"ok","code":0,"text":"invalid idx"}
 		}
