@@ -7,7 +7,7 @@ import crypto from "crypto";
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 const conn = knex({client:client, connection:connection})
-import {tokenCheck} from "./tokenCheck.js";
+import {tokenCheck} from "../util/tokenCheck.js";
 router.put('/', async(ctx)=> {
 	const {authorization} = ctx.request.header;
 	console.log(ctx.request)
