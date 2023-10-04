@@ -36,7 +36,7 @@ router.get('/', (ctx)=> {
 	
 });
 const accountCheck = async(email, platform)=>{
-	let signupCheck = await conn("users").select().where({email : email, platform : platform})
+	let signupCheck = await conn("users").select().where({email : email, platform : platform, is_delete:0})
 	if(signupCheck.length == 0)
 		return {"code":0};
 	else
@@ -57,7 +57,7 @@ router.post('/',async(ctx)=>{
 	}
 	else if(platform == 4){
 		const {email, password} = ctx.request.body;
-		let userCheck = await conn("users").select().where({email:email, password:crypto.createHash('sha512').update(password).digest('hex')});
+		let userCheck = await conn("users").select().where({email:email, password:crypto.createHash('sha512').update(password).digest('hex'), is_delete: 0});
 		if(userCheck.length == 1){
 			let {idx, email,nickname}  = userCheck[0];
 			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
