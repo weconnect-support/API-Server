@@ -14,16 +14,4 @@ const delUser = async()=>{
 	console.log(data.data);
 	console.log("[=] test end..");
 }
-const getUserIdx = async(idx)=>{
-	console.log("[!] Get User Infomation using idx TEST!")
-	let data = await axios(
-		{
-			url :`https://ss-dev.noe.systems/users/${idx}`,
-			method : "GET",
-			headers : {'authorization':jwt}
-
-	})
-	console.log(data.data);
-	console.log("[=] test end..");
-}
 delUser();
