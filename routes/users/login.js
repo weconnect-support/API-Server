@@ -37,6 +37,9 @@ router.get('/', (ctx)=> {
 });
 const accountCheck = async(email, platform)=>{
 	let signupCheck = await conn("users").select().where({email : email, platform : platform, is_delete:0})
+	console.log(email + " / "+platform)
+	console.log("sc");
+	console.log(signupCheck);
 	if(signupCheck.length == 0)
 		return {"code":0};
 	else
@@ -61,7 +64,7 @@ router.post('/',async(ctx)=>{
 		if(userCheck.length == 1){
 			let {idx, email,nickname}  = userCheck[0];
 			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
-			ctx.body = {"status":"ok","code":1,"userinfo": userCheck[0],token:token,"text":"login_success"}
+			ctx.body = {"status":"ok","code":1,token:token,"text":"login_success"}
 		}
 		else{
 			ctx.body = {"status":"no","code":2,"text":"login_fail"}
@@ -79,7 +82,6 @@ router.post('/',async(ctx)=>{
 				const data = await axios({
 					url:`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`
 				})
-
 				email = data.data.email;
 			}
 			catch(err){
@@ -104,7 +106,7 @@ router.post('/',async(ctx)=>{
 			}
 		}
 		else{//naver
-			//console.log("naver.")
+			console.log("naver")
 			try{
 				const data = await axios({
 					url :'https://openapi.naver.com/v1/nid/me',
@@ -113,7 +115,7 @@ router.post('/',async(ctx)=>{
 					}
 				});
 				//console.log("ddddddnnn");
-				//console.log(data.data.response)
+//				console.log(data.data.response)
 				email = data.data.response.email;
 			}
 			catch(err){
@@ -122,10 +124,11 @@ router.post('/',async(ctx)=>{
 				return;
 			}
 		}
-
+		console.log("email : "+email);
 		let userInfo = await accountCheck(email,platform);
+		console.log(userInfo);
 		if(userInfo.code){ // login sucess
-			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
+			let token = jwt.sign({"idx":userInfo.data.idx,"nickname":userInfo.data.nickname,"platform":userInfo.data.platform,"expire":new Date()}, jwtKey);
 			ctx.body = {"status":"ok", "code":1,"text":"login_success", "token":token};
 		}
 		else{//login fail		

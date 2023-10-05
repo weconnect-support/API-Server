@@ -38,7 +38,7 @@ router.post('/', async(ctx)=> {
 					password: crypto.createHash('sha512').update(password).digest('hex'),
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					phone : phone,
 					signup_date:conn.raw("now()"),
 					platform : 4,
@@ -81,7 +81,7 @@ router.post('/', async(ctx)=> {
 					email: email,
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					signup_date:conn.raw("now()"),
 					phone : phone,
 					platform : platform,
@@ -106,6 +106,7 @@ router.post('/', async(ctx)=> {
 				});
 			}
 			catch(err){
+				console.log(err);
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return
 			}
@@ -123,7 +124,7 @@ router.post('/', async(ctx)=> {
 					email: email,
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					signup_date:conn.raw("now()"),
 					phone : phone,
 					platform : platform,
@@ -157,13 +158,13 @@ router.post('/', async(ctx)=> {
 				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
 				return;
 			}
-			const {name} = res.data.response;
-			const phone = res.data.response.mobile_e164;
+			const {name} = data.data.response;
+			const phone = data.data.response.mobile_e164;
 			let signUpUser = await conn("users").insert({
 				email: email,
 				name: name,
 				nickname : nickname,
-				is_delete: null,
+				is_delete: 0,
 				signup_date:conn.raw("now()"),
 				phone : phone,
 				platform : platform,
