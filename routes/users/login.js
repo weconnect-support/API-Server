@@ -37,9 +37,6 @@ router.get('/', (ctx)=> {
 });
 const accountCheck = async(email, platform)=>{
 	let signupCheck = await conn("users").select().where({email : email, platform : platform, is_delete:0})
-	console.log(email + " / "+platform)
-	console.log("sc");
-	console.log(signupCheck);
 	if(signupCheck.length == 0)
 		return {"code":0};
 	else
@@ -47,7 +44,6 @@ const accountCheck = async(email, platform)=>{
 }
 
 router.post('/',async(ctx)=>{	
-	console.log(ctx.request.body)
 	const {platform} =  ctx.request.body;
 	if(platform == undefined || (platform >= 5 || platform <= 0)){
 		/*
@@ -106,7 +102,6 @@ router.post('/',async(ctx)=>{
 			}
 		}
 		else{//naver
-			console.log("naver")
 			try{
 				const data = await axios({
 					url :'https://openapi.naver.com/v1/nid/me',
@@ -114,19 +109,14 @@ router.post('/',async(ctx)=>{
 						"Authorization":`Bearer ${access_token}`
 					}
 				});
-				//console.log("ddddddnnn");
-//				console.log(data.data.response)
 				email = data.data.response.email;
 			}
 			catch(err){
-				console.log(err)
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return;
 			}
 		}
-		console.log("email : "+email);
 		let userInfo = await accountCheck(email,platform);
-		console.log(userInfo);
 		if(userInfo.code){ // login sucess
 			let token = jwt.sign({"idx":userInfo.data.idx,"nickname":userInfo.data.nickname,"platform":userInfo.data.platform,"expire":new Date()}, jwtKey);
 			ctx.body = {"status":"ok", "code":1,"text":"login_success", "token":token};

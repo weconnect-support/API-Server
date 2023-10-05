@@ -70,7 +70,6 @@ router.post('/', async(ctx)=> {
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return;
 			}
-			console.log(data.data)
 			const {email,name} = data.data;
 			if(await accountCheck(email, platform)){
 				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
@@ -106,15 +105,11 @@ router.post('/', async(ctx)=> {
 				});
 			}
 			catch(err){
-				console.log(err);
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return
 			}
-			console.log(data);
-			console.log(data.data.kakao_account)
 			const {email} = data.data.kakao_account;
 			const name = data.data.kakao_account.profile.nickname;
-			console.log(email);
 			if(await accountCheck(email, platform)){
 				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
 				return;
