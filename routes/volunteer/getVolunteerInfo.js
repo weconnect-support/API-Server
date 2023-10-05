@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
 router.get('/:idx',async(ctx)=>{
-	console.log("inex");
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
@@ -24,6 +23,20 @@ router.get('/:idx',async(ctx)=>{
 		ctx.body = {"status":"ok","code":0,"text":"invalid idx"}
 	}
 	else{
+		/*if(tokenCheck(authorization)){
+			return;
+		}
+		else{
+			var decoded = jwt.verify(authorization, jwtKey);
+			console.log(decoded);
+		}
+		*/
+
+		for(let i=0;i<comment.length;i++){
+			if(comment[i].is_protect == 1){
+				comment[i].comment = "protect...";
+			}
+		}
 		ctx.body = {
 			"status":"ok",
 			"code":1,
