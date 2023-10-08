@@ -97,7 +97,7 @@ router.post('/',async(ctx)=>{
 			ctx.body = {"status":"ok", "code":1,"text":"login_success", "token":token};
 		}
 		else{//login fail		
-			ctx.body = {"status":"no","code":2, "test": "login fail"}
+			ctx.body = {"status":"no","code":2, "text": "login fail"}
 		}
 	}
 
