@@ -69,7 +69,14 @@ router.post('/',async(ctx)=>{
 						'Content-type' : 'application/x-www-form-urlencoded;charset=utf-8'
 					}
 				});
+				console.log(data.data);
 				email = data.data.kakao_account.email;
+				if(!email){
+					ctx.body = {"status":"no", "code":4,"text":"not_found_email_at_kakao_oauth"};
+					return;
+
+				}
+				console.log("kk email : "+ email);
 			}
 			catch(err){
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};

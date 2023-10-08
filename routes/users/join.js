@@ -28,7 +28,7 @@ router.post('/', async(ctx)=> {
 			return;
 		}
 		if((await accountCheck(email,platform)) ){
-			ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+			ctx.body = {"status":"no", "code":2,"text":"email valid"};
 		}
 		else{
 			let signUpUser = await conn("users").insert(
@@ -71,7 +71,7 @@ router.post('/', async(ctx)=> {
 			}
 			const {email,name} = data.data;
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
 			let signUpUser = await conn("users").insert(
@@ -110,7 +110,7 @@ router.post('/', async(ctx)=> {
 			const {email} = data.data.kakao_account;
 			const name = data.data.kakao_account.profile.nickname;
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
 			let signUpUser = await conn("users").insert(
@@ -149,7 +149,7 @@ router.post('/', async(ctx)=> {
 			const {email} = data.data.response;
 			//mobile, mobile_e164
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
 			const {name} = data.data.response;
