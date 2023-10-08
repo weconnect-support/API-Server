@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {jwtKey} from '../../serverPrivacy.js'
 const tokenCheck = (token)=>{
+	console.log("tokencheck");
 	if(!token){
 		return 1;
 	}

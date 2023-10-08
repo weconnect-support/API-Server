@@ -1,5 +1,4 @@
 import Router from 'koa-router';
-import {domain} from "./serviceURL.js";
 const router = new Router();
 import {google} from 'googleapis';
 import knex from "knex";
@@ -29,7 +28,7 @@ router.post('/', async(ctx)=> {
 			return;
 		}
 		if((await accountCheck(email,platform)) ){
-			ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+			ctx.body = {"status":"no", "code":2,"text":"email valid"};
 		}
 		else{
 			let signUpUser = await conn("users").insert(
@@ -38,7 +37,7 @@ router.post('/', async(ctx)=> {
 					password: crypto.createHash('sha512').update(password).digest('hex'),
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					phone : phone,
 					signup_date:conn.raw("now()"),
 					platform : 4,
@@ -70,10 +69,9 @@ router.post('/', async(ctx)=> {
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return;
 			}
-			console.log(data.data)
 			const {email,name} = data.data;
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
 			let signUpUser = await conn("users").insert(
@@ -81,7 +79,7 @@ router.post('/', async(ctx)=> {
 					email: email,
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					signup_date:conn.raw("now()"),
 					phone : phone,
 					platform : platform,
@@ -109,13 +107,10 @@ router.post('/', async(ctx)=> {
 				ctx.body = {"status":"no", "code":3,"text":"access_token_err"};
 				return
 			}
-			console.log(data);
-			console.log(data.data.kakao_account)
 			const {email} = data.data.kakao_account;
 			const name = data.data.kakao_account.profile.nickname;
-			console.log(email);
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
 			let signUpUser = await conn("users").insert(
@@ -123,7 +118,7 @@ router.post('/', async(ctx)=> {
 					email: email,
 					name: name,
 					nickname : nickname,
-					is_delete: null,
+					is_delete: 0,
 					signup_date:conn.raw("now()"),
 					phone : phone,
 					platform : platform,
@@ -154,16 +149,16 @@ router.post('/', async(ctx)=> {
 			const {email} = data.data.response;
 			//mobile, mobile_e164
 			if(await accountCheck(email, platform)){
-				ctx.body = {"status":"no", "code":2,"text":"email vaild"};
+				ctx.body = {"status":"no", "code":2,"text":"email valid"};
 				return;
 			}
-			const {name} = res.data.response;
-			const phone = res.data.response.mobile_e164;
+			const {name} = data.data.response;
+			const phone = data.data.response.mobile_e164;
 			let signUpUser = await conn("users").insert({
 				email: email,
 				name: name,
 				nickname : nickname,
-				is_delete: null,
+				is_delete: 0,
 				signup_date:conn.raw("now()"),
 				phone : phone,
 				platform : platform,

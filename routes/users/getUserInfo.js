@@ -4,7 +4,7 @@ const router = new Router();
 import axios from 'axios';
 import knex from "knex";
 import jwt from 'jsonwebtoken';
-import {tokenCheck} from './tokenCheck.js';
+import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
 router.get('/:idx',async(ctx)=>{
 	console.log("idx");
