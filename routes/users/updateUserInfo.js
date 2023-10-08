@@ -38,13 +38,13 @@ router.put('/', async(ctx)=> {
 		catch(e){
 			ctx.body = {"status":"no","code":-1, "text":"fail.."}
 		}
-		ctx.body = {"status":"ok","code":1,"text":"modify_complate",token:token}
+		ctx.body = {"status":"ok","code":1,"text":"data_modify_complate",token:token}
 	}
 })
 router.patch('/', async(ctx)=> {
 	const {authorization} = ctx.request.header;
-	const {nickname, name, phone, address, address_detail} = ctx.request.body;
-	if(!nickname || !name || !phone || !address || !address_detail){
+	const {nickname, name, phone, address, address_detail,device_id, noti_flag} = ctx.request.body;
+	if(!nickname || !name || !phone || !address || !address_detail || !device_id || noti_flag){
 		ctx.body = {"status":"no","code":-2, "text":"invalid parameter"};
 		return;
 	}
@@ -63,6 +63,8 @@ router.patch('/', async(ctx)=> {
 				"phone":phone,
 				"address":address,
 				"address_detail" : address_detail,
+				"device_id":device_id,
+				"noti_flag":noti_flag,
 				"last_modify_time":conn.raw("now()")
 			}).where({idx:decode.idx});
 			res = await conn("users").select().where({idx:decode.idx});
