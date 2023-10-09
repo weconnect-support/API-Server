@@ -16,7 +16,7 @@ const accountCheck = async(email, platform)=>{
 router.post('/', async(ctx)=> {
 	var data;
 	const {platform,nickname,noti_flag,device_id,phone,address,address_detail} = ctx.request.body
-	if(!nickname || !noti_flag || !device_id || !phone || !address){
+	if(!nickname || (noti_flag == undefined) || !device_id || !phone || !address){
 		ctx.body = {"status":"no","code":-1 ,"text": "parameter validation check error"};
 		return;
 	}
