@@ -11,7 +11,7 @@ router.get('/:idx',async(ctx)=>{
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
-		.select('volunteers.title','volunteers.detail','volunteers.location','users.idx','users.nickname','users.name','users.email')
+		.select('volunteers.idx', 'volunteers.title','volunteers.detail','volunteers.location','volunteers.user_idx','users.nickname','users.name','users.email')
 		.where({"volunteers.is_delete":0, "volunteers.idx":idx});
 	const comment = await conn("comment")
 		.join('users','comment.user_idx', '=', 'users.idx')
