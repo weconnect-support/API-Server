@@ -9,7 +9,7 @@ const conn = knex({client:client, connection:connection});
 router.post('/',async(ctx)=>{
 	const {authorization} = ctx.request.header;
 	if(tokenCheck(authorization)){
-		ctx.body = {"status":"ok","code":-1, "text":"invalid token"}
+		ctx.body = {"status":"ok","code":-1, "text":"invalid_token"}
 		return;
 	}
 	else{
@@ -29,14 +29,14 @@ router.post('/',async(ctx)=>{
 				deadline,
 			} = ctx.request.body;
 			if(!title || !detail || !location || !address || !address_detail || !category || !due_date || ((customer_limit == undefined) || customer_limit <= 0) || ((volunteer_limit == undefined)|| volunteer_limit <= 0) || !deadline){
-				ctx.body = {"status":"no","code":-2 ,"text": "parameter validation check error"};
+				ctx.body = {"status":"no","code":-2 ,"text": "parameter_validation_check_error"};
 				return;
 			}
 			let d = new Date();
 			let due = new Date(due_date);
 			let dead = new Date(deadline);
 			if(!(d < due) || !(d < dead)){
-				ctx.body = {"status":"no", "code":-3, "text": "invalid date"}
+				ctx.body = {"status":"no", "code":-3, "text": "invalid_date"}
 				return;
 			}
 			//data recv
@@ -60,12 +60,7 @@ router.post('/',async(ctx)=>{
 			//img recv
 		}
 		catch(e){
-			if(volunteers.length == 0){
-				ctx.body = {"status":"ok","code":0,"text":"invalid data"}
-			}
-			else{
-				ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
-			}
+			ctx.body = {"status":"no","code":-4,"text":"invalid_data"}
 		}//catch
 		ctx.body = {"status":"ok","code":1,"text":"make_volunteer_complate"}
 	}
