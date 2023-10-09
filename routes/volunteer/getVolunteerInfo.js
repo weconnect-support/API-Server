@@ -21,7 +21,7 @@ router.get('/:idx',async(ctx)=>{
 			"comment.volunteer_idx":idx
 		})
 	if(volunteers.length == 0){
-		ctx.body = {"status":"ok","code":0,"text":"invalid idx"}
+		ctx.body = {"status":"ok","code":-1,"text":"invalid idx"}
 	}
 	else{
 		var decoded;
