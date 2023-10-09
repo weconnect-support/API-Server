@@ -44,7 +44,8 @@ router.put('/', async(ctx)=> {
 router.patch('/', async(ctx)=> {
 	const {authorization} = ctx.request.header;
 	const {nickname, name, phone, address, address_detail,device_id, noti_flag} = ctx.request.body;
-	if(!nickname || !name || !phone || !address || !address_detail || !device_id || noti_flag){
+	if(!nickname || !name || !phone || !address || !address_detail || !device_id || (noti_flag == undefined) ){
+		console.log(`${nickname} || !${name} || !${phone} || !${address} || !${address_detail} || !${device_id} || ${noti_flag}`);
 		ctx.body = {"status":"no","code":-2, "text":"invalid parameter"};
 		return;
 	}

@@ -8,14 +8,9 @@ import volunteer from './volunteer/index.js';
 router.use('/volunteer',volunteer.routes());
 
 router.get('/', (ctx) => {
-	console.log('asdfasdf');
-    ctx.body = 'gogogafasdfao GET ' + ctx.request.path;
+    ctx.body = `ssangsang API SERVER`;
 });
 router.use('/getVersion',version.routes());
-router.get('/test',(ctx)=>{
-	console.log("cccc");
-	ctx.body = 'asdfsadfsaf';
-});
 
 module.exports = router;
 

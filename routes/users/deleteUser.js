@@ -20,7 +20,7 @@ router.delete('/',async(ctx)=>{
 			ctx.body = {"status":"no", "code":-1, "text":"invalid user"};
 		}
 		else{
-			const del = await conn("users").update({"is_delete":1, "delete_date":conn.raw("now()")}).where({"idx":users[0].idx})
+			const del = await conn("users").update({"is_delete":1, "delete_date":conn.raw("now()"), "email":users[0].email+"_del"}).where({"idx":users[0].idx})
 			ctx.body={"status":"ok","code":1,"text":"user_delete_success"};
 		}
 	}

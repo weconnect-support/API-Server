@@ -12,7 +12,7 @@ router.get('/:idx',async(ctx)=>{
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.title','volunteers.detail','volunteers.location','users.idx','users.nickname','users.name','users.email')
-		.where({"volunteers.is_delete":0});
+		.where({"volunteers.is_delete":0, "volunteers.idx":idx});
 	const comment = await conn("comment")
 		.join('users','comment.user_idx', '=', 'users.idx')
 		.select("comment.*", "users.name","users.nickname")
@@ -21,7 +21,7 @@ router.get('/:idx',async(ctx)=>{
 			"comment.volunteer_idx":idx
 		})
 	if(volunteers.length == 0){
-		ctx.body = {"status":"ok","code":0,"text":"invalid idx"}
+		ctx.body = {"status":"ok","code":-1,"text":"invalid idx"}
 	}
 	else{
 		var decoded;

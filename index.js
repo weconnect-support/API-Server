@@ -18,5 +18,5 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen(PORT, () => {
-    console.log(`sori koa ${PORT}`);
+    console.log(`ssangsnag API Server START : PORT - ${PORT}`);
 });
