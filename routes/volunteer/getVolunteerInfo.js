@@ -12,7 +12,7 @@ router.get('/:idx',async(ctx)=>{
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.title','volunteers.detail','volunteers.location','users.idx','users.nickname','users.name','users.email')
-		.where({"volunteers.is_delete":0});
+		.where({"volunteers.is_delete":0, "volunteers.idx":idx});
 	const comment = await conn("comment")
 		.join('users','comment.user_idx', '=', 'users.idx')
 		.select("comment.*", "users.name","users.nickname")
