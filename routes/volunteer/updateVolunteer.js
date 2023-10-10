@@ -50,6 +50,14 @@ router.put('/:idx',async(ctx)=>{
 				return;
 
 			}
+
+			let db_due = new Date(volunteers[0].due_date)
+			//deadline logic ..... confirm....
+			if(!(d < db_due)){
+				ctx.body = {"status":"no", "code":-3, "text": "invalid_date"}
+				return;
+
+			}
 			await conn("volunteers").update({
 				"title":title,
 				"detail":detail,
