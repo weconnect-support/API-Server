@@ -18,9 +18,13 @@ router.delete('/:idx',async(ctx)=>{
 		console.log(decoded);
 		try{
 			//data recv
-			const volunteers = await conn("volunteers").select().where({"idx":idx,"user_idx":decoded.idx});
+			const volunteers = await conn("volunteers").select().where({"idx":idx,"user_idx":decoded.idx,"is_delete":0});
+			if(volunteers.length == 0){
+				ctx.body = {"status":"no","code":-5,"text":"invalid_idx"}
+				return;
+
+			}
 			await conn("volunteers").update({"is_delete":1, "delete_time":conn.raw("now()")}).where({"idx":idx, "user_idx":decoded.idx})
-			//img recv
 		}
 		catch(e){
 			ctx.body = {"status":"no","code":-4,"text":"invalid_data"}
