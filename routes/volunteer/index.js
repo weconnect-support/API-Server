@@ -10,5 +10,7 @@ import deleteVolunteer from "./deleteVolunteer.js";
 router.use(deleteVolunteer.routes());
 import updateVolunteer from "./updateVolunteer.js";
 router.use(updateVolunteer.routes());
+import commentIndex from "./comment/index.js";
+router.use(commentIndex.routes());
 module.exports = router;
 

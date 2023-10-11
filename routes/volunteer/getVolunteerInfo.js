@@ -37,11 +37,12 @@ router.get('/:idx',async(ctx)=>{
 		for(let i=0;i<comment.length;i++){
 			if(decoded != 0){
 				console.log(decoded.idx)
-				if(decoded.idx != comment[i].user_idx && comment[i].is_protect == 1){
+				//reader logic add plz
+				if((decoded.idx != comment[i].user_idx && comment[i].is_protect == 1)&&(decoded.idx != volunteers[0].user_idx && comment[i].is_protect == 1)){
 					comment[i].comment = "protect...";
 				}
 			}
-			else{
+			else{//user only watch protect comment
 				comment[i].comment = "protect.."
 			}
 		}
