@@ -10,7 +10,7 @@ router.put('/:idx',async(ctx)=>{
 	const {authorization} = ctx.request.header;
 	const {idx} = ctx.params
 	if(tokenCheck(authorization)){
-		ctx.body = {"status":"ok","code":-1, "text":"invalid_token"}
+		ctx.body = {"status":"no","code":-1, "text":"invalid_token"}
 		return;
 	}
 	else{
