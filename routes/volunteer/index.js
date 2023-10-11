@@ -8,5 +8,7 @@ import makeVolunteer from "./makeVolunteer.js";
 router.use(makeVolunteer.routes());
 import deleteVolunteer from "./deleteVolunteer.js";
 router.use(deleteVolunteer.routes());
+import updateVolunteer from "./updateVolunteer.js";
+router.use(updateVolunteer.routes());
 module.exports = router;
 
