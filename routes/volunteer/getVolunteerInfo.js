@@ -35,10 +35,10 @@ router.get('/:idx',async(ctx)=>{
 			console.log(decoded);
 		}
 		for(let i=0;i<comment.length;i++){
+			console.log(comment[i]);
 			if(decoded != 0){
 				console.log(decoded.idx)
-				//reader logic add plz
-				if((decoded.idx != comment[i].user_idx && comment[i].is_protect == 1)&&(decoded.idx != volunteers[0].user_idx && comment[i].is_protect == 1)){
+				if((decoded.idx != comment[i].user_idx && comment[i].is_protect == 1)||(decoded.idx != volunteers[0].user_idx && comment[i].is_protect == 1)){
 					comment[i].comment = "protect...";
 				}
 			}
