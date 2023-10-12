@@ -35,7 +35,8 @@ router.put('/:idx/comment/:commentIdx',async(ctx)=>{
 				"last_modify_time" : conn.raw("now()"),
 			}).where({
 				"idx":commentIdx,
-				"user_idx":decoded.idx
+				"user_idx":decoded.idx,
+				"is_delete":0
 			})
 		}
 		catch(e){
