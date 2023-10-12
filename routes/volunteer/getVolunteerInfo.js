@@ -61,17 +61,9 @@ router.get('/:idx',async(ctx)=>{
 router.get('/',async(ctx)=>{
 	const {idx} = ctx.params;
 	const {authorization} = ctx.request.header;
-	/*if(tokenCheck(authorization)){
-		ctx.body = {"status":"ok","code":-1, "text":"invalid token"}
-		return;
-	}
-	else{
-		var decoded = jwt.verify(authorization, jwtKey);
-		console.log(decoded);
-		*/
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
-		.select('volunteers.title','volunteers.detail','volunteers.location','users.nickname','users.name','users.email')
+		.select('volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location','users.nickname','users.name','users.email')
 		.where({"volunteers.is_delete":0});
 	if(volunteers.length == 0){
 		ctx.body = {"status":"ok","code":0,"text":"invalid data"}

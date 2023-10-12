@@ -17,6 +17,7 @@ router.post('/',async(ctx)=>{
 		console.log(decoded);
 		try{
 			const {
+				type,//int
 				title, 
 				detail, 
 				location, 
@@ -28,7 +29,7 @@ router.post('/',async(ctx)=>{
 				volunteer_limit,//int
 				deadline,
 			} = ctx.request.body;
-			if(!title || !detail || !location || !address || !address_detail || !category || !due_date || ((customer_limit == undefined) || customer_limit <= 0) || ((volunteer_limit == undefined)|| volunteer_limit <= 0) || !deadline){
+			if(((type == undefined) || (type>=2 || type<=0))||!title || !detail || !location || !address || !address_detail || !category || !due_date || ((customer_limit == undefined) || customer_limit <= 0) || ((volunteer_limit == undefined)|| volunteer_limit <= 0) || !deadline){
 				ctx.body = {"status":"no","code":-2 ,"text": "parameter_validation_check_error"};
 				return;
 			}
@@ -41,6 +42,7 @@ router.post('/',async(ctx)=>{
 			}
 			//data recv
 			const volunteers = await conn("volunteers").insert({
+				"type": type,// 1 = volunteer, 2 customer
 				"title" : title,
 				"detail" : detail,
 				"user_idx" : decoded.idx,
