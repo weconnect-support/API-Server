@@ -11,7 +11,8 @@ router.get('/:idx',async(ctx)=>{
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
-		.select('volunteers.idx', 'volunteers.title','volunteers.detail','volunteers.location','volunteers.address','volunteers.address_detail','volunteers.user_idx','users.nickname','users.name','users.email')
+		.select('volunteers.*', 'users.nickname','users.name','users.email')
+			//'volunteers.idx', 'volunteers.title','volunteers.detail','volunteers.location','volunteers.address','volunteers.address_detail','volunteers.user_idx','users.nickname','users.name','users.email')
 		.where({"volunteers.is_delete":0, "volunteers.idx":idx});
 	const comment = await conn("comment")
 		.join('users','comment.user_idx', '=', 'users.idx')
@@ -34,7 +35,7 @@ router.get('/:idx',async(ctx)=>{
 			decoded = jwt.verify(authorization, jwtKey);
 			console.log(decoded);
 		}
-		for(let i=0;i<comment.length;i++){
+		for(let i=0;i<comment.length;i++){//make protect comment
 			console.log(comment[i]);
 			if(decoded != 0){
 				console.log(decoded.idx)
@@ -46,12 +47,24 @@ router.get('/:idx',async(ctx)=>{
 				comment[i].comment = "protect.."
 			}
 		}
+			const volunteer_people = await conn("volunteer_join").select().where({
+				"volunteer_idx":idx
+			})
+		console.log(volunteer_people)
+			const customer_people = await conn("customer_join").select().where({
+				"volunteer_idx":idx
+			})
 		ctx.body = {
 			"status":"ok",
 			"code":1,
 			"data":{
 				"volunteer":volunteers[0],
 				"comments":comment,
+
+				"current_customer":customer_people.length,
+				"customers":customer_people,
+				"current_volunteer":volunteer_people.length,
+				"volunteers": volunteer_people,
 			},
 			"text":"volunteers data complate"
 		}
@@ -64,7 +77,7 @@ router.get('/',async(ctx)=>{
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location','users.nickname','users.name','users.email')
-		.where({"volunteers.is_delete":0});
+		.where({"volunteers.is_delete":0, });
 	if(volunteers.length == 0){
 		ctx.body = {"status":"ok","code":0,"text":"invalid data"}
 	}
