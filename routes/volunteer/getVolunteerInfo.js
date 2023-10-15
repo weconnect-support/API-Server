@@ -12,7 +12,7 @@ router.get('/:idx',async(ctx)=>{
 	const volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.*', 'users.nickname','users.name','users.email')
-			//'volunteers.idx', 'volunteers.title','volunteers.detail','volunteers.location','volunteers.address','volunteers.address_detail','volunteers.user_idx','users.nickname','users.name','users.email')
+	//'volunteers.idx', 'volunteers.title','volunteers.detail','volunteers.location','volunteers.address','volunteers.address_detail','volunteers.user_idx','users.nickname','users.name','users.email')
 		.where({"volunteers.is_delete":0, "volunteers.idx":idx});
 	const comment = await conn("comment")
 		.join('users','comment.user_idx', '=', 'users.idx')
@@ -47,20 +47,27 @@ router.get('/:idx',async(ctx)=>{
 				comment[i].comment = "protect.."
 			}
 		}
-			const volunteer_people = await conn("volunteer_join").select().where({
-				"volunteer_idx":idx
-			})
+		const volunteer_people = await conn("volunteer_join")
+		.join('users','volunteer_join.user_idx', '=', 'users.idx')
+		.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({
+			"volunteer_join.volunteer_idx":idx,
+			"volunteer_join.is_delete":0
+		})
 		console.log(volunteer_people)
-			const customer_people = await conn("customer_join").select().where({
-				"volunteer_idx":idx
+		const customer_people = await conn("customer_join")
+			.join('users','customer_join.user_idx', '=', 'users.idx')
+			.select('customer_join.*','users.nickname','users.name','users.email', ).where({
+				"customer_join.volunteer_idx":idx,
+				"customer_join.is_delete":0
 			})
+
+
 		ctx.body = {
 			"status":"ok",
 			"code":1,
 			"data":{
 				"volunteer":volunteers[0],
 				"comments":comment,
-
 				"current_customer":customer_people.length,
 				"customers":customer_people,
 				"current_volunteer":volunteer_people.length,
@@ -74,17 +81,54 @@ router.get('/:idx',async(ctx)=>{
 router.get('/',async(ctx)=>{
 	const {idx} = ctx.params;
 	const {authorization} = ctx.request.header;
-	const volunteers = await conn("volunteers")
+	var volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
-		.select('volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location','users.nickname','users.name','users.email')
+		.select('volunteers.*',/*'volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location',*/'users.nickname','users.name','users.email')
 		.where({"volunteers.is_delete":0, });
 	if(volunteers.length == 0){
 		ctx.body = {"status":"ok","code":0,"text":"invalid data"}
 	}
 	else{
+		console.log(volunteers.length)
+		console.log(volunteers[volunteers.length-1])	
+		const volunteer_people = await conn("volunteer_join")
+			.join('users','volunteer_join.user_idx', '=', 'users.idx')
+			.select('volunteer_join.*','users.nickname','users.name','users.email', )
+			.where(
+				"volunteer_join.volunteer_idx", '<=',volunteers[volunteers.length-1].idx
+			).andWhere("volunteer_join.volunteer_idx", '>=',volunteers[0].idx)
+			.andWhere("volunteer_join.is_delete",0)
+			console.log(volunteer_people);
+		const customer_people = await conn("customer_join")
+			.join('users','customer_join.user_idx', '=', 'users.idx')
+			.select('customer_join.*','users.nickname','users.name','users.email', )
+			.where(
+				"customer_join.volunteer_idx", '<=',volunteers[volunteers.length-1].idx
+			).andWhere("customer_join.volunteer_idx", '>=',volunteers[0].idx)
+			.andWhere("customer_join.is_delete",0)
+
+		for(let i = 0; i<volunteers.length;i++){
+			volunteers[i].volunteers = []
+			volunteers[i].customers = []
+		}
+		for(let j = 0 ; j< volunteers.length;j++){
+			for(let i=0;i<volunteer_people.length;i++){
+				if(volunteers[j].idx == volunteer_people[i].volunteer_idx){
+					volunteers[j].volunteers.push(volunteer_people[i])
+				}
+			}
+			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
+		}
+		for(let j = 0 ; j< volunteers.length;j++){
+			for(let i=0;i<customer_people.length;i++){
+				if(volunteers[j].idx == customer_people[i].volunteer_idx){
+					volunteers[j].customers.push(customer_people[i])
+				}
+			}
+			volunteers[j].current_customer = volunteers[j].customers.length;
+		}
 		ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
 	}
-	//}
 });
 module.exports = router;
 
