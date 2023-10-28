@@ -48,14 +48,28 @@ router.post('/:idx/join',async(ctx)=>{
 		}
 		console.log("@@@@@@@@@@@@@@@@");
 		if(type == 1){
+			const volunteer_limit = volunteers[0].volunteer_limit
 			const volunteer_people = await conn("volunteer_join")
 				.select('*').
 				where({
 					"volunteer_idx":idx,
-					"user_idx":decoded.idx,
+					//"user_idx":decoded.idx,
 					"volunteer_join.is_delete":0
 				})
-			if(volunteer_people.length == 0){
+			var joinFlag = 0
+			for(let i=0;i<volunteer_people.length;i++){
+				if(volunteer_people[i].user_idx == decoded.idx){
+					joinFlag = 1;
+					break;
+				}
+			}
+			console.log("join flag = "+ joinFlag)
+			if(volunteer_people.length >= volunteer_limit){
+				ctx.body = {"status":"no", "code":-5, "text":"volunteer_people_queue_full"}
+				return;
+				
+			}
+			if(!joinFlag){
 				await conn("volunteer_join").insert(joinData)
 				flag = 1;
 			}
@@ -65,14 +79,26 @@ router.post('/:idx/join',async(ctx)=>{
 
 		}
 		else if(type==2){
+			const customer_limit = volunteers[0].customer_limit
 			const customer_people = await conn("customer_join")
 				.select('*')
 				.where({
 					"volunteer_idx":idx,
-					"user_idx": decoded.idx,
 					"is_delete":0
 				})
-			if(customer_people.length == 0 ){
+			var joinFlag = 0;
+			for(let i=0;i<customer_people.length;i++){
+				if(customer_people[i].user_idx == decoded.idx){
+					joinFlag = 1;
+					break;
+				}
+			}
+
+			if(customer_people.length >= customer_limit ){
+				ctx.body = {"status":"no", "code":-5, "text":"volunteer_people_queue_full"}
+				return;
+			}
+			if(!joinFlag){
 				await conn("customer_join").insert(joinData);
 				flag = 1;
 			}
