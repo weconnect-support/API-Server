@@ -1,9 +1,9 @@
 const axios = require('axios');
-const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMC0xMVQxNzoxNzowMS4wMjdaIiwiaWF0IjoxNjk3MDQ0NjIxfQ.iGHZ9Uo3pA8bs1i9yGA2cysRMnkgA3vIhsOpp5tRIq4'
+const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMC0xMlQxNjoyNTo0MS4wMjJaIiwiaWF0IjoxNjk3MTI3OTQxfQ.Lsb9AP21jrlOA3JWNA0bG11NYpl04YlVasKW6_Fda7k" 
 const makeComment = async(idx)=>{
 	console.log("[!] make Comment test!");
 	let data = {
-		"comment": "comment test postman",
+		"comment": "comment test@!@!",
 		"is_protect": 0
 	};
 	let config = {

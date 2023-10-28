@@ -17,6 +17,7 @@ router.post('/',async(ctx)=>{
 		console.log(decoded);
 		try{
 			const {
+				type,//int
 				title, 
 				detail, 
 				location, 
@@ -28,7 +29,7 @@ router.post('/',async(ctx)=>{
 				volunteer_limit,//int
 				deadline,
 			} = ctx.request.body;
-			if(!title || !detail || !location || !address || !address_detail || !category || !due_date || ((customer_limit == undefined) || customer_limit <= 0) || ((volunteer_limit == undefined)|| volunteer_limit <= 0) || !deadline){
+			if(((type == undefined) || (type>=2 || type<=0))||!title || !detail || !location || !address || !address_detail || !category || !due_date || ((customer_limit == undefined) || customer_limit <= 0) || ((volunteer_limit == undefined)|| volunteer_limit <= 0) || !deadline){
 				ctx.body = {"status":"no","code":-2 ,"text": "parameter_validation_check_error"};
 				return;
 			}
@@ -40,7 +41,9 @@ router.post('/',async(ctx)=>{
 				return;
 			}
 			//data recv
+			let now = conn.raw("now()");
 			const volunteers = await conn("volunteers").insert({
+				"type": type,// 1 = volunteer, 2 customer
 				"title" : title,
 				"detail" : detail,
 				"user_idx" : decoded.idx,
@@ -50,14 +53,29 @@ router.post('/',async(ctx)=>{
 				"category":category,
 				"is_delete":0,
 				"delete_time":null,
-				"last_modify_time":conn.raw("now()"),
+				"last_modify_time":now,
 				"due_date":due_date,
 				"customer_limit":customer_limit,
 				"volunteer_limit":volunteer_limit,
 				"deadline": deadline,
 				"is_dead": 0
 			})
+			console.log("volunteers : "+volunteers[0]);
+			const joinData = {
+				user_idx : decoded.idx,
+				volunteer_idx : volunteers, // last idx
+				attendance : 0,
+				is_delete : 0,
+				joined_at : now,
+			}
+			console
 			//img recv
+			if(type == 1){
+				await conn("volunteer_join").insert(joinData)
+			}
+			else{
+				await conn("customer_join").insert(joinData)
+			}
 		}
 		catch(e){
 			ctx.body = {"status":"no","code":-4,"text":"invalid_data"}
