@@ -12,5 +12,7 @@ import updateVolunteer from "./updateVolunteer.js";
 router.use(updateVolunteer.routes());
 import commentIndex from "./comment/index.js";
 router.use(commentIndex.routes());
+import joinVolunteer from "./joinVolunteer.js";
+router.use(joinVolunteer.routes());
 module.exports = router;
 
