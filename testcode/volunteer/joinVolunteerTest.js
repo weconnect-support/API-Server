@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMC0yOFQwNzozMDowNi4wMTNaIiwiaWF0IjoxNjk4NDc4MjA2fQ.4noD5yyM7I9qgSleX2nksnUg1bqXka28GDj9ib4hWRc"
+const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMC0yOVQxMjoyNzoyOS42ODVaIiwiaWF0IjoxNjk4NTgyNDQ5fQ.f5FXUbg0pczS7wCbz_jkF3sPBVz8UTKl1Upkq6JMets"
+
 
 const joinVolunteer = async(idx)=>{
 	console.log("[!] join Volunteer TEST!")
