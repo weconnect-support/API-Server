@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
 router.delete('/:idx/join',async(ctx)=>{
-	console.log('idx');
+	console.log('idx dleete');
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.select()
@@ -39,8 +39,10 @@ router.delete('/:idx/join',async(ctx)=>{
 			decoded = jwt.verify(authorization, jwtKey);
 			console.log(decoded);
 		}
+		var flag = 0;
+		var update
 		if(type == 1){
-			await conn("volunteer_join")
+			update = await conn("volunteer_join")
 			.update({
 				"is_delete":1,
 				"deleted_at":conn.raw("now()"),
@@ -48,11 +50,12 @@ router.delete('/:idx/join',async(ctx)=>{
 			.where({
 				"volunteer_idx":idx,
 				"user_idx":decoded.idx,
-				"volunteer_join.is_delete":0
+				"is_delete":0,
 			})
+			flag =1;
 		}
 		else if(type==2){
-			await conn("customer_join")
+			update = await conn("customer_join")
 			.update({
 				"is_delete":1,
 				"deleted_at":conn.raw("now()"),
@@ -60,8 +63,20 @@ router.delete('/:idx/join',async(ctx)=>{
 			.where({
 				"volunteer_idx":idx,
 				"user_idx":decoded.idx,
-				"volunteer_join.is_delete":0
+				"is_delete":0
 			})
+			flag = 1
+		}
+		if(flag){
+			if(update == 1){
+				ctx.body = {"status" : "ok", "code": 1, "text": "volunteer_signout_complate"}
+			}
+			else{
+				ctx.body = {"status" : "no", "code": -4, "text": "volunteer_not_joined"}
+			}
+		}
+		else{
+			ctx.body = {"status":"no", "code":-2, "text":"invalid_parameter_error"}
 		}
 	}
 });
