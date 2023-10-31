@@ -48,20 +48,35 @@ router.get('/:idx',async(ctx)=>{
 			}
 		}
 		const volunteer_people = await conn("volunteer_join")
-		.join('users','volunteer_join.user_idx', '=', 'users.idx')
-		.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({
-			"volunteer_join.volunteer_idx":idx,
-			"volunteer_join.is_delete":0
-		})
-		console.log(volunteer_people)
+			.join('users','volunteer_join.user_idx', '=', 'users.idx')
+			.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({
+				"volunteer_join.volunteer_idx":idx,
+				"volunteer_join.is_delete":0
+			})
 		const customer_people = await conn("customer_join")
 			.join('users','customer_join.user_idx', '=', 'users.idx')
 			.select('customer_join.*','users.nickname','users.name','users.email', ).where({
 				"customer_join.volunteer_idx":idx,
 				"customer_join.is_delete":0
 			})
-
-
+		var joined = 0;
+		if(decoded == 0)
+			joined = -1;
+		else{
+			for(let i = 0;i<volunteer_people.length;i++){
+				if(volunteer_people[i].user_idx == decoded.idx){
+					joined = 1;
+					break;
+				}
+			}
+			for(let i=0;i<customer_people.length;i++){
+				if(customer_people[i].user_idx == decoded.idx){
+					joined = 1;
+					break;
+				}
+			}
+		}
+		volunteers[0].joined = joined;
 		ctx.body = {
 			"status":"ok",
 			"code":1,
@@ -98,7 +113,7 @@ router.get('/',async(ctx)=>{
 				"volunteer_join.volunteer_idx", '<=',volunteers[volunteers.length-1].idx
 			).andWhere("volunteer_join.volunteer_idx", '>=',volunteers[0].idx)
 			.andWhere("volunteer_join.is_delete",0)
-			console.log(volunteer_people);
+		console.log(volunteer_people);
 		const customer_people = await conn("customer_join")
 			.join('users','customer_join.user_idx', '=', 'users.idx')
 			.select('customer_join.*','users.nickname','users.name','users.email', )
