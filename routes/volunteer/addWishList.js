@@ -12,7 +12,7 @@ router.post('/:idx/wishlist',async(ctx)=>{
 		.select()
 		.where({"is_delete":0, "idx":idx});
 	if(volunteers.length == 0){
-		ctx.body = {"status":"ok","code":-1,"text":"invalid idx"}
+		ctx.body = {"status":"no","code":-1,"text":"invalid idx"}
 		return;
 	}
 	else{
@@ -20,7 +20,7 @@ router.post('/:idx/wishlist',async(ctx)=>{
 		var read = 0;
 		const {authorization} = ctx.request.header;
 		if(tokenCheck(authorization)){
-			ctx.body = {"status":"ok","code":-2, "text":"invalid token"}
+			ctx.body = {"status":"no","code":-2, "text":"invalid token"}
 			return;
 		}
 		else{

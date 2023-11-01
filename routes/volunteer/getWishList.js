@@ -13,7 +13,7 @@ router.get('/wishlist',async(ctx)=>{
 		var read = 0;
 		const {authorization} = ctx.request.header;
 		if(tokenCheck(authorization)){
-			ctx.body = {"status":"ok","code":-1, "text":"invalid token"}
+			ctx.body = {"status":"no","code":-1, "text":"invalid token"}
 			return;
 		}
 		else{
