@@ -6,7 +6,7 @@ import knex from "knex";
 import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
-router.post('/:idx/addWishList',async(ctx)=>{
+router.post('/:idx/wishlist',async(ctx)=>{
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.select()

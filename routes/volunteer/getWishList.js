@@ -19,9 +19,10 @@ router.get('/wishlist',async(ctx)=>{
 		else{
 			decoded = jwt.verify(authorization, jwtKey);
 			let wishlist = await conn("wishlist")
+				.join("volunteers", 'wishlist.volunteer_idx','=','volunteers.idx')
 				.select()
 				.where({
-					"user_idx":decoded.idx,
+					"wishlist.user_idx":decoded.idx,
 				})
 				ctx.body = {
 					'status' : "ok", 
