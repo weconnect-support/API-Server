@@ -78,7 +78,7 @@ router.post('/',async(ctx)=>{
 				var buffer = Buffer.from(photo[i], "base64");
 				filename = volunteers+"-"+(new Date()+"")
 				filename = crypto.createHash("sha256").update(filename).digest('hex')
-				fs.writeFileSync(`/tmp/${filename}.jpg`, buffer);
+				fs.writeFileSync(`/home/run/img/${filename}.jpg`, buffer);
 				await conn('volunteer_img').insert({
 					"volunteer_idx":volunteers,
 					"url":`${filename}.jpg`
