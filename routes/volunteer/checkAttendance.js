@@ -15,13 +15,25 @@ router.post('/:idx/attendance',async(ctx)=>{
 	}
 	else{
 		const {type,coordinate} = ctx.request.body;
-		if(type == undefined){
+		if(type == undefined || coordinate == undefined){
 			ctx.body = {"status":"no", "code":-2, "text":"parameter_error"}
+			return;
+		}
+		
+		const check = await conn("volunteers")
+			.select()
+			.where({
+				"idx":idx,
+				"is_delete":0,
+			}).andWhere("due_date", ">",conn.raw("now()"))
+		if(check.length == 0 ){
+			ctx.body = {"status":"no","code":-3, "text":"invalid_idx"}
 		}
 		var decoded = jwt.verify(authorization, jwtKey);
 		console.log("gogogo")
+		var updateFlag = undefined;
 		if(type == 1){
-			await conn("volunteer_join")
+			updateFlag = await conn("volunteer_join")
 				.update({
 					"coordinate":coordinate,
 					"attendance":1,
@@ -34,7 +46,7 @@ router.post('/:idx/attendance',async(ctx)=>{
 				})
 		}
 		else if(type == 2){
-			await conn("customer_join")
+			updateFlag = await conn("customer_join")
 				.update({
 					"coordinate":coordinate,
 					"attendance":1,
@@ -51,8 +63,12 @@ router.post('/:idx/attendance',async(ctx)=>{
 			ctx.body = {"status":"no", "code": -2,"text":"parameter_error" }
 			return;
 		}
-//		const check = await conn("")
-		ctx.body = {"status":"ok","code":1,"text":"attendance_complate"};
+		if(updateFlag == 1){
+			ctx.body = {"status":"ok","code":1,"text":"attendance_complate"};
+		}
+		else{
+			ctx.body = {"status":"no","code":-4, "text":"attendance_fail"}
+		}
 	}
 });
 module.exports = router;

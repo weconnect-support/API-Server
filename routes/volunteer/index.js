@@ -31,6 +31,8 @@ router.use(addWishList.routes());
 import delWishList from "./delWishList.js";
 router.use(delWishList.routes());
 
+import checkAttendance from "./checkAttendance.js";
+router.use(checkAttendance.routes());
 
 module.exports = router;
 
