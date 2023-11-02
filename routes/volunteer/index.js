@@ -34,5 +34,7 @@ router.use(delWishList.routes());
 import checkAttendance from "./checkAttendance.js";
 router.use(checkAttendance.routes());
 
+import getAttendance from "./getAttendance.js";
+router.use(getAttendance.routes());
 module.exports = router;
 
