@@ -11,7 +11,7 @@ router.post('/:idx/join',async(ctx)=>{
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.select()
-		.where({"volunteers.is_delete":0, "volunteers.idx":idx})
+		.where({"volunteers.is_delete":0, "volunteers.idx":idx, "is_dead":0})
 		.andWhere("deadline", ">", conn.raw("now()"))
 	if(volunteers.length == 0){
 		ctx.body = {"status":"no","code":-1,"text":"invalid idx"}

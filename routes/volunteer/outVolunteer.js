@@ -11,7 +11,7 @@ router.delete('/:idx/join',async(ctx)=>{
 	const {idx} = ctx.params;
 	const volunteers = await conn("volunteers")
 		.select()
-		.where({"is_delete":0, "idx":idx, "is_delete":0})
+		.where({"is_delete":0, "idx":idx, "is_delete":0, "is_dead":0})
 		.andWhere("deadline", ">", conn.raw("now()"));
 	if(volunteers.length == 0){
 		ctx.body = {"status":"no","code":-1,"text":"invalid idx"}
