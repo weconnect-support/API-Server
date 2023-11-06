@@ -7,6 +7,9 @@ router.use('/users',users.routes());
 import volunteer from './volunteer/index.js';
 router.use('/volunteer',volunteer.routes());
 
+import calendar from './calendar/index.js';
+router.use('/calendar', calendar.routes());
+
 router.get('/', (ctx) => {
     ctx.body = `ssangsang API SERVER`;
 });
