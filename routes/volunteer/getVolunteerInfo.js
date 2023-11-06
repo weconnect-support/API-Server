@@ -71,7 +71,7 @@ router.get('/:idx',async(ctx)=>{
 			}
 			for(let i=0;i<customer_people.length;i++){
 				if(customer_people[i].user_idx == decoded.idx){
-					joined = 1;
+					joined = 2;
 					break;
 				}
 			}

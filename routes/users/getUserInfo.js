@@ -123,6 +123,10 @@ router.get('/',async(ctx)=>{
 			var vjoined_apply = []
 			for(let i=0;i<cjoined.length;i++) {
 				var cmp = new Date(cjoined[i].due_date)
+				cjoined[i].maked = 0;
+				if(cjoined[i].user_idx == decoded.idx){
+					cjoined[i].maked = 1;
+				}
 				if(d < cmp) {
 					cjoined_apply.push(cjoined[i])
 				}
@@ -132,6 +136,11 @@ router.get('/',async(ctx)=>{
 			}
 			for(let i=0;i<vjoined.length;i++){
 				var cmp = new Date(vjoined[i].due_date)
+				vjoined[i].maked = 0;
+				if(vjoined[i].user_idx == decoded.idx){
+					vjoined[i].maked = 1;
+				}
+
 				if(d < cmp){
 					vjoined_apply.push(vjoined[i])
 				}
@@ -139,8 +148,13 @@ router.get('/',async(ctx)=>{
 					vjoined_passed.push(vjoined[i])
 				}
 			}
-
-			ctx.body={"status":"ok","code":1,"text":"complate","userInfo":users[0]};
+			const volunteer_joined = {
+				cjoined_passed : cjoined_passed,
+				cjoined_apply : cjoined_apply,
+				vjoined_passed : vjoined_passed,
+				vjoined_apply : vjoined_apply
+			}
+			ctx.body={"status":"ok","code":1,"text":"complate","userInfo":users[0], volunteer_joined};
 		}
 	}
 });
