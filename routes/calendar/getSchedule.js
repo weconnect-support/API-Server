@@ -12,6 +12,7 @@ router.get('/:year/:month', async(ctx) => {
 		return;
 	}
 	else{
+		var decoded = jwt.verify(authorization, jwtKey);
 		const {year, month} = ctx.request.params
 		if(year == undefined || month == undefined ){
 			ctx.body = {"status":"ok", "code" : -2, "text": "parameter_validation_error"}
@@ -29,7 +30,8 @@ router.get('/:year/:month', async(ctx) => {
 				.select()
 				.where({
 					"volunteers.is_delete":0,
-					"volunteer_join.is_delete":0
+					"volunteer_join.is_delete":0,
+					"volunteer_join.user_idx" : decoded.idx
 				})
 				.andWhere('volunteers.due_date', '>=',`${year}-${month}-01`)
 				.andWhere('volunteers.due_date',"<",`${endYear}-${endMonth}-01`)
@@ -38,7 +40,8 @@ router.get('/:year/:month', async(ctx) => {
 				.select()
 				.where({
 					"volunteers.is_delete":0,
-					"customer_join.is_delete":0
+					"customer_join.is_delete":0,
+					"customer_join.user_idx":decoded.idx
 				})
 				.andWhere('volunteers.due_date', '>=',`${year}-${month}-01`)
 				.andWhere('volunteers.due_date',"<",`${endYear}-${endMonth}-01`)
