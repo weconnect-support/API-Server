@@ -66,7 +66,7 @@ router.get('/:idx/review/:review', async(ctx) => {
 		}
 		catch(e){
 			console.log(e)
-			ctx.body = {"status":"no","code":-3, "text":"schedule_fail"}
+			ctx.body = {"status":"no","code":-3, "text":"review_show_fail"}
 		}
 	}
 });
