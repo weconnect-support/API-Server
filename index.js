@@ -14,8 +14,8 @@ import index from './routes/index.js';
 import bodyParser from 'koa-bodyparser';
 import mount from 'koa-mount';
 app.use(bodyParser());
+app.use(mount('/img',serve(__dirname + "/img")))
 router.use(index.routes());
-app.use(mount('/img',serve(__dirname + "/imgs")))
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(PORT, () => {
