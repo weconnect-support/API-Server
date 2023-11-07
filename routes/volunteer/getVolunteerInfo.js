@@ -47,6 +47,11 @@ router.get('/:idx',async(ctx)=>{
 				comment[i].comment = "protect.."
 			}
 		}
+		const volunteer_img = await conn("volunteer_img")
+			.select()
+			.where({
+				"volunteer_idx":idx
+			})
 		const volunteer_people = await conn("volunteer_join")
 			.join('users','volunteer_join.user_idx', '=', 'users.idx')
 			.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({
@@ -77,6 +82,7 @@ router.get('/:idx',async(ctx)=>{
 			}
 		}
 		volunteers[0].joined = joined;
+		volunteers[0].img = volunteer_img;
 		ctx.body = {
 			"status":"ok",
 			"code":1,
@@ -94,7 +100,6 @@ router.get('/:idx',async(ctx)=>{
 	///}
 });
 router.get('/',async(ctx)=>{
-	const {idx} = ctx.params;
 	const {authorization} = ctx.request.header;
 	var volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
