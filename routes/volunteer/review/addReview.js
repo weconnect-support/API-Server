@@ -18,7 +18,7 @@ router.post('/:idx/review', async(ctx) => {
 		const {idx} = ctx.request.params
 		const {photo, contents} = ctx.request.body
 		if(!contents || photo == undefined){
-			ctx.body = {"status":"no", "code": -5, "text" : "parameter_error"}
+			ctx.body = {"status":"no", "code": -2, "text" : "parameter_error"}
 			return;
 		}
 		try{
