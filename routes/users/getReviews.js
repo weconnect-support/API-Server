@@ -53,8 +53,9 @@ router.get('/:idx/review/:review', async(ctx) => {
 					idx:review,
 					is_delete:0
 				})
-			if(review.length == 0){
+			if(reviews.length == 0){
 				ctx.body = {"status":"no","code":-4, "text":"invalid_idx"}
+				return;
 			}
 			var img = await conn('review_img')
 				.select()

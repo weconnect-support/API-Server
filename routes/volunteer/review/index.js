@@ -5,5 +5,8 @@ import addReview from "./addReview.js";
 router.use(addReview.routes());
 import getReview from "./getReview.js";
 router.use(getReview.routes());
+import delReview from "./delReview.js";
+router.use(delReview.routes());
+
 module.exports = router;
 
