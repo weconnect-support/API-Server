@@ -20,7 +20,10 @@ router.delete('/:idx/review/:review', async(ctx) => {
 		}
 		try{
 			var reviews = await conn('review')
-				.delete()
+				.update({
+					is_delete:1,
+					deleted_at:conn.raw("now()")
+				})
 				.where({
 					user_idx:decoded.idx,
 					volunteer_idx:idx,
