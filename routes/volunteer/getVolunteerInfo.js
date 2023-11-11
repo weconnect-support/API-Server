@@ -137,14 +137,13 @@ router.get('/',async(ctx)=>{
 					volunteers[j].volunteers.push(volunteer_people[i])
 				}
 			}
-			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
-		}
-		for(let j = 0 ; j< volunteers.length;j++){
 			for(let i=0;i<customer_people.length;i++){
 				if(volunteers[j].idx == customer_people[i].volunteer_idx){
 					volunteers[j].customers.push(customer_people[i])
 				}
 			}
+			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
+
 			volunteers[j].current_customer = volunteers[j].customers.length;
 		}
 		ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
