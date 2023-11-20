@@ -6,6 +6,9 @@ import knex from "knex";
 import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
+const randomPick = (arr)=>{
+	return arr[Math.floor(Math.random() * arr.length)];
+}
 router.get('/:idx',async(ctx)=>{
 	console.log('idx');
 	const {idx} = ctx.params;
@@ -127,10 +130,19 @@ router.get('/',async(ctx)=>{
 			).andWhere("customer_join.volunteer_idx", '>=',volunteers[0].idx)
 			.andWhere("customer_join.is_delete",0)
 
+		var volIdxList = []
 		for(let i = 0; i<volunteers.length;i++){
 			volunteers[i].volunteers = []
 			volunteers[i].customers = []
+			volunteers[i].img = -1;
+			volunteers[i].imgCnt = 0;
+			volIdxList.push(volunteers[i].idx);
 		}
+		console.log(volIdxList);
+		var volImgList = await conn("volunteer_img")
+			.select()
+			.whereIn("volunteer_idx",volIdxList);
+		console.log(volImgList)
 		for(let j = 0 ; j< volunteers.length;j++){
 			for(let i=0;i<volunteer_people.length;i++){
 				if(volunteers[j].idx == volunteer_people[i].volunteer_idx){
@@ -142,8 +154,20 @@ router.get('/',async(ctx)=>{
 					volunteers[j].customers.push(customer_people[i])
 				}
 			}
+			for(let i=0;i<volImgList.length;i++){
+				//console.log(`vtidx : ${volunteers[j].idx}`)
+				//console.log(`volimglist : ${volImgList[i].volunteer_idx}`)
+				if(volunteers[j].idx == volImgList[i].volunteer_idx){
+					if(volunteers[j].imgCnt == 0){
+						volunteers[j].img = volImgList[i].url;
+					}
+					volunteers[j].imgCnt += 1;
+				}
+			}
+			if(volunteers[j].imgCnt == 0){
+				volunteers[j].img = `/categories/${volunteers[j].category}/${randomPick([1,2,3])}.png`
+			}
 			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
-
 			volunteers[j].current_customer = volunteers[j].customers.length;
 		}
 		ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
