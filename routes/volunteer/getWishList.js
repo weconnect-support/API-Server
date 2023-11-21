@@ -6,6 +6,9 @@ import knex from "knex";
 import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
+const randomPick = (arr)=>{
+	return arr[Math.floor(Math.random() * arr.length)];
+}
 router.get('/wishlist',async(ctx)=>{
 	console.log("wishlist");
 	const {idx} = ctx.params;
@@ -28,6 +31,7 @@ router.get('/wishlist',async(ctx)=>{
 		
 		for(let i=0;i<wishlist.length;i++){
 			volunteer_list.push(wishlist[i].volunteer_idx);
+
 		}
 		const volunteer_join = await conn("volunteer_join")
 			.join('users','volunteer_join.user_idx', '=', 'users.idx')
@@ -39,11 +43,20 @@ router.get('/wishlist',async(ctx)=>{
 			.select('customer_join.*','users.nickname','users.name','users.email')
 			.where({"customer_join.is_delete":0})
 			.whereIn("customer_join.volunteer_idx", volunteer_list);
+		var volImgList = await conn("volunteer_img")
+			.select()
+			.whereIn("volunteer_idx",volunteer_list);
+/*
 		for(let i=0;i<wishlist.length;i++){
 			wishlist[i].volunteers = [];
 			wishlist[i].customers = [];
 		}
+		*/
 		for(let j = 0;j< wishlist.length;j++){
+			wishlist[j].volunteers = [];
+			wishlist[j].customers = [];
+			wishlist[j].img = [];
+			wishlist[j].imgCnt =0;
 			for(let i=0;i<volunteer_join.length;i++){
 				if(wishlist[j].volunteer_idx == volunteer_join[i].volunteer_idx){
 					wishlist[j].volunteers.push(volunteer_join[i])
@@ -51,8 +64,19 @@ router.get('/wishlist',async(ctx)=>{
 			}
 			for(let k=0;k<customer_join.length;k++){
 				if(wishlist[j].volunteer_idx == customer_join[k].volunteer_idx){
-					wishlist[j].volunteers.push(customer_join[k])
+					wishlist[j].customers.push(customer_join[k])
 				}
+			}
+			for(let i=0;i<volImgList.length;i++){
+				if(wishlist[j].idx == volImgList[i].volunteer_idx){
+					if(wishlist[j].imgCnt == 0){
+						wishlist[j].img = volImgList[i].url;
+					}
+					wishlist[j].imgCnt += 1;
+				}
+			}
+			if(wishlist[j].imgCnt == 0){
+				wishlist[j].img = `categories/${wishlist[j].category}/${randomPick([1,2,3])}.png`
 			}
 			wishlist[j].current_volunteer = wishlist[j].volunteers.length;
 			wishlist[j].current_customer = wishlist[j].customers.length;
