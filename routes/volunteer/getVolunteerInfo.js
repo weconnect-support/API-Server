@@ -55,6 +55,14 @@ router.get('/:idx',async(ctx)=>{
 			.where({
 				"volunteer_idx":idx
 			})
+		if(volunteer_img.length == 0){
+			/*
+			for(let i=1;i<=3;i++){
+				volunteer_img.push(`categories/${volunteers[0].category}/${i}.png`);
+			}
+			*/
+			volunteer_img.push(`categories/${volunteers[0].category}/${randomPick([1,2,3])}.png`)
+		}
 		const volunteer_people = await conn("volunteer_join")
 			.join('users','volunteer_join.user_idx', '=', 'users.idx')
 			.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({

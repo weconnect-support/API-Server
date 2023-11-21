@@ -32,7 +32,9 @@ router.post('/',async(ctx)=>{
 		console.log("dd");
 		if(userCheck.length == 1){
 			let {idx, email,nickname}  = userCheck[0];
-			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":new Date()}, jwtKey);
+			let expireTime = new Date();
+			expireTime.setHours(expireTime.getHours()+1);
+			let token = jwt.sign({"idx":idx,"nickname":nickname,"expire":expireTime}, jwtKey);
 			ctx.body = {"status":"ok","code":1,token:token,"text":"login_success"}
 			return;
 		}
