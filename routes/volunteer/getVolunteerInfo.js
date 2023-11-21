@@ -165,7 +165,7 @@ router.get('/',async(ctx)=>{
 				}
 			}
 			if(volunteers[j].imgCnt == 0){
-				volunteers[j].img = `/categories/${volunteers[j].category}/${randomPick([1,2,3])}.png`
+				volunteers[j].img = `categories/${volunteers[j].category}/${randomPick([1,2,3])}.png`
 			}
 			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
 			volunteers[j].current_customer = volunteers[j].customers.length;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMC0xM1QyMDozODoyMi41NzJaIiwiaWF0IjoxNjk3MjI5NTAyfQ.h5G5kbYY-xcWljk4ewkAxcQkLvRIDMs5sAL1sHjnIsw"
+const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjUsIm5pY2tuYW1lIjoidGVzdEFQSU5pY2tuYW1lIiwiZXhwaXJlIjoiMjAyMy0xMS0yMVQwNzoxNDo0Ny4wMTRaIiwiaWF0IjoxNzAwNTUwODg3fQ.79f2e86VtqRGjln9tFvB4ia3mislGRieF5_XIYrFU_g"
 const makeVolunteer = async()=>{
 	console.log("[!] Make Volunteer @Volunteer TEST!")
 	let data = await axios({
@@ -16,11 +16,12 @@ const makeVolunteer = async()=>{
 			"location": "location test",
 			"address": "address test",
 			"address_detail": "addresss detail",
-			"category": "category test",
-			"due_date": "2023-10-20",
+			"category": "art",
+			"due_date": "2023-12-20",
 			"customer_limit": 1,
 			"volunteer_limit": 1,
-			"deadline": "2023-10-15"
+			"deadline": "2023-12-15",
+			"photo":[]
 		}
 	})
 	console.log(data.data);
