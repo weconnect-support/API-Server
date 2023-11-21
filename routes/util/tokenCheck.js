@@ -15,7 +15,6 @@ const tokenCheck = (token)=>{
 	}
 
 	var v  = new Date(decode.expire)
-	v.setHours(v.getHours()+1);
 	console.log("now ; "+now);
 	console.log("t d : "+v);
 	if(now > v){//expire

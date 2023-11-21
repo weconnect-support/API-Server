@@ -100,7 +100,9 @@ router.post('/',async(ctx)=>{
 		}
 		let userInfo = await accountCheck(email,platform);
 		if(userInfo.code){ // login sucess
-			let token = jwt.sign({"idx":userInfo.data.idx,"nickname":userInfo.data.nickname,"platform":userInfo.data.platform,"expire":new Date()}, jwtKey);
+			let expireTime = new Date()
+			expireTime.setHours(expireTime.getHours()+1);
+			let token = jwt.sign({"idx":userInfo.data.idx,"nickname":userInfo.data.nickname,"platform":userInfo.data.platform,"expire":expireTime}, jwtKey);
 			ctx.body = {"status":"ok", "code":1,"text":"login_success", "token":token};
 		}
 		else{//login fail		
