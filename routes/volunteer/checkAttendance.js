@@ -27,7 +27,7 @@ router.post('/:idx/attendance',async(ctx)=>{
 				"is_delete":0,
 			}).andWhere("due_date", ">",conn.raw("now()"))
 		if(check.length == 0 ){
-			ctx.body = {"status":"no","code":-3, "text":"invalid_idx"}
+			ctx.body = {"status":"no","code":-1, "text":"invalid_idx"}
 		}
 		var decoded = jwt.verify(authorization, jwtKey);
 		console.log("gogogo")
@@ -67,7 +67,7 @@ router.post('/:idx/attendance',async(ctx)=>{
 			ctx.body = {"status":"ok","code":1,"text":"attendance_complate"};
 		}
 		else{
-			ctx.body = {"status":"no","code":-4, "text":"attendance_fail"}
+			ctx.body = {"status":"no","code":-3, "text":"attendance_fail"}
 		}
 	}
 });

@@ -76,8 +76,11 @@ router.get('/:idx',async(ctx)=>{
 				"customer_join.is_delete":0
 			})
 		var joined = 0;
-		if(decoded == 0)
+		var wish = 0;
+		if(decoded == 0){
 			joined = -1;
+			wish = -1;
+		}
 		else{
 			for(let i = 0;i<volunteer_people.length;i++){
 				if(volunteer_people[i].user_idx == decoded.idx){
@@ -91,9 +94,17 @@ router.get('/:idx',async(ctx)=>{
 					break;
 				}
 			}
+			const wishlist = await conn("wishlist")
+				.select()
+				.where({
+					"user_idx":decoded.idx,
+					"volunteer_idx":idx
+				});
+			wish = wishlist.length == 0 ? 0 : 1
 		}
 		volunteers[0].joined = joined;
 		volunteers[0].img = volunteer_img;
+		volunteers[0].wish = wish;
 		ctx.body = {
 			"status":"ok",
 			"code":1,
