@@ -5,7 +5,7 @@ const PORT = 8080;
 const cors = require('@koa/cors');
 import serve from 'koa-static'
 let corsOptions = {
-	origin: "http://localhost:3000",
+	origin: "https://ssangsang.weconnect.support",
 	credentials: true,
 }
 app.use(cors(corsOptions)); 
