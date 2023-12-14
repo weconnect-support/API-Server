@@ -15,7 +15,8 @@ users.use(updateUserInfo.routes());
 
 import deleteUser from "./deleteUser.js";
 users.use(deleteUser.routes());
-
+import getReviews from "./getReviews.js"
+users.use(getReviews.routes());
 
 module.exports = users;
 

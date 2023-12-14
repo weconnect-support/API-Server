@@ -36,5 +36,8 @@ router.use(checkAttendance.routes());
 
 import getAttendance from "./getAttendance.js";
 router.use(getAttendance.routes());
+
+import reviewIndex from "./review/index.js";
+router.use(reviewIndex.routes());
 module.exports = router;
 

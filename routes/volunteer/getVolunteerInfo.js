@@ -6,6 +6,9 @@ import knex from "knex";
 import jwt from 'jsonwebtoken';
 import {tokenCheck} from '../util/tokenCheck.js';
 const conn = knex({client:client, connection:connection});
+const randomPick = (arr)=>{
+	return arr[Math.floor(Math.random() * arr.length)];
+}
 router.get('/:idx',async(ctx)=>{
 	console.log('idx');
 	const {idx} = ctx.params;
@@ -52,6 +55,14 @@ router.get('/:idx',async(ctx)=>{
 			.where({
 				"volunteer_idx":idx
 			})
+		if(volunteer_img.length == 0){
+			/*
+			for(let i=1;i<=3;i++){
+				volunteer_img.push(`categories/${volunteers[0].category}/${i}.png`);
+			}
+			*/
+			volunteer_img.push(`categories/${volunteers[0].category}/${randomPick([1,2,3])}.png`)
+		}
 		const volunteer_people = await conn("volunteer_join")
 			.join('users','volunteer_join.user_idx', '=', 'users.idx')
 			.select('volunteer_join.*','users.nickname','users.name','users.email', ).where({
@@ -65,8 +76,11 @@ router.get('/:idx',async(ctx)=>{
 				"customer_join.is_delete":0
 			})
 		var joined = 0;
-		if(decoded == 0)
+		var wish = 0;
+		if(decoded == 0){
 			joined = -1;
+			wish = -1;
+		}
 		else{
 			for(let i = 0;i<volunteer_people.length;i++){
 				if(volunteer_people[i].user_idx == decoded.idx){
@@ -80,9 +94,17 @@ router.get('/:idx',async(ctx)=>{
 					break;
 				}
 			}
+			const wishlist = await conn("wishlist")
+				.select()
+				.where({
+					"user_idx":decoded.idx,
+					"volunteer_idx":idx
+				});
+			wish = wishlist.length == 0 ? 0 : 1
 		}
 		volunteers[0].joined = joined;
 		volunteers[0].img = volunteer_img;
+		volunteers[0].wish = wish;
 		ctx.body = {
 			"status":"ok",
 			"code":1,
@@ -101,10 +123,15 @@ router.get('/:idx',async(ctx)=>{
 });
 router.get('/',async(ctx)=>{
 	const {authorization} = ctx.request.header;
+	let options = {"volunteers.is_delete":0}
+	const {mode, searchTime} = ctx.request.query
+	if(searchTime != undefined){
+		options.deadline = conn.raws("now()")
+	}
 	var volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.*',/*'volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location',*/'users.nickname','users.name','users.email')
-		.where({"volunteers.is_delete":0, });
+		.where(options);
 	if(volunteers.length == 0){
 		ctx.body = {"status":"ok","code":0,"text":"invalid data"}
 	}
@@ -127,25 +154,55 @@ router.get('/',async(ctx)=>{
 			).andWhere("customer_join.volunteer_idx", '>=',volunteers[0].idx)
 			.andWhere("customer_join.is_delete",0)
 
+		var volIdxList = []
 		for(let i = 0; i<volunteers.length;i++){
 			volunteers[i].volunteers = []
 			volunteers[i].customers = []
+			volunteers[i].img = -1;
+			volunteers[i].imgCnt = 0;
+			volIdxList.push(volunteers[i].idx);
 		}
+		console.log(volIdxList);
+		var volImgList = await conn("volunteer_img")
+			.select()
+			.whereIn("volunteer_idx",volIdxList);
+		console.log(volImgList)
 		for(let j = 0 ; j< volunteers.length;j++){
 			for(let i=0;i<volunteer_people.length;i++){
 				if(volunteers[j].idx == volunteer_people[i].volunteer_idx){
 					volunteers[j].volunteers.push(volunteer_people[i])
 				}
 			}
-			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
-		}
-		for(let j = 0 ; j< volunteers.length;j++){
 			for(let i=0;i<customer_people.length;i++){
 				if(volunteers[j].idx == customer_people[i].volunteer_idx){
 					volunteers[j].customers.push(customer_people[i])
 				}
 			}
+			for(let i=0;i<volImgList.length;i++){
+				//console.log(`vtidx : ${volunteers[j].idx}`)
+				//console.log(`volimglist : ${volImgList[i].volunteer_idx}`)
+				if(volunteers[j].idx == volImgList[i].volunteer_idx){
+					if(volunteers[j].imgCnt == 0){
+						volunteers[j].img = volImgList[i].url;
+					}
+					volunteers[j].imgCnt += 1;
+				}
+			}
+			if(volunteers[j].imgCnt == 0){
+				volunteers[j].img = `categories/${volunteers[j].category}/${randomPick([1,2,3])}.png`
+			}
+			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
 			volunteers[j].current_customer = volunteers[j].customers.length;
+			if(mode == "customer"){
+				if(volunteers[j].current_customer == volunteer[j].customer_limit){
+					volunteers[j].splice(j,1)
+				}
+			}
+			if(mode == "volunteer"){
+				if(volunteers[j].current_volunteer == volunteers[j].volunteer_limit){
+					volunteers[j].splice(j,1)
+				}
+			}
 		}
 		ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
 	}
