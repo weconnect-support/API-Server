@@ -123,10 +123,15 @@ router.get('/:idx',async(ctx)=>{
 });
 router.get('/',async(ctx)=>{
 	const {authorization} = ctx.request.header;
+	let options = {"volunteers.is_delete":0}
+	const {mode, searchTime} = ctx.request.query
+	if(searchTime != undefined){
+		options.deadline = conn.raws("now()")
+	}
 	var volunteers = await conn("volunteers")
 		.join('users','volunteers.user_idx','=','users.idx')
 		.select('volunteers.*',/*'volunteers.idx','volunteers.type','volunteers.title','volunteers.detail','volunteers.location',*/'users.nickname','users.name','users.email')
-		.where({"volunteers.is_delete":0, });
+		.where(options);
 	if(volunteers.length == 0){
 		ctx.body = {"status":"ok","code":0,"text":"invalid data"}
 	}
@@ -188,6 +193,16 @@ router.get('/',async(ctx)=>{
 			}
 			volunteers[j].current_volunteer = volunteers[j].volunteers.length;
 			volunteers[j].current_customer = volunteers[j].customers.length;
+			if(mode == "customer"){
+				if(volunteers[j].current_customer == volunteer[j].customer_limit){
+					volunteers[j].splice(j,1)
+				}
+			}
+			if(mode == "volunteer"){
+				if(volunteers[j].current_volunteer == volunteers[j].volunteer_limit){
+					volunteers[j].splice(j,1)
+				}
+			}
 		}
 		ctx.body = {"status":"ok","data":volunteers, "text":"volunteers data complate"}
 	}

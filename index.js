@@ -4,11 +4,19 @@ import Router from 'koa-router';
 const PORT = 8080;
 const cors = require('@koa/cors');
 import serve from 'koa-static'
+
 let corsOptions = {
 	origin: "https://ssangsang.weconnect.support",
 	credentials: true,
 }
+/*
+let c = {
+	origin: "http://localhost:3000",
+	credentials: true
+}
+*/
 app.use(cors(corsOptions)); 
+//app.use(cors(c));
 const router = new Router();
 import index from './routes/index.js';
 import bodyParser from 'koa-bodyparser';
